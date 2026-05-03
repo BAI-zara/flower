@@ -4,8 +4,8 @@ import {
   type FaceLandmarkerResult
 } from "@mediapipe/tasks-vision";
 import { type RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { useGrowth, type GrowthState } from "../../hooks/useGrowth";
 import type { SceneMode } from "../../components/scene/SceneContext";
+import { useGrowth, type GrowthState } from "../../hooks/useGrowth";
 
 export type { GrowthState };
 
@@ -83,18 +83,18 @@ function estimateLookingAtCenter(result: FaceLandmarkerResult) {
 
 function messageForStage(stage: GrowthState) {
   if (stage === "mature") {
-    return "它正在盛放…";
+    return "The bloom is opening wider.";
   }
 
   if (stage === "giant") {
-    return "它为你长成了一片奇迹 🌸";
+    return "The flower has become a tiny garden miracle.";
   }
 
   if (stage === "flower") {
-    return "它为你开了 🌸";
+    return "The flower has opened.";
   }
 
-  return "继续看着…";
+  return "Keep looking softly.";
 }
 
 export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneMode = "day") {
@@ -109,7 +109,7 @@ export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneM
   const { growthState, focusedSeconds, reset, update } = useGrowth(sceneMode === "rain" ? 1.1 : 1);
   const [appState, setAppState] = useState<AppState>("idle");
   const [isLooking, setIsLooking] = useState(false);
-  const [message, setMessage] = useState("看着它，它会长大 🌱");
+  const [message, setMessage] = useState("Look at the flower and it will grow.");
 
   const stopCamera = useCallback(() => {
     if (frameRef.current !== null) {
@@ -164,7 +164,7 @@ export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneM
 
     if (shouldUpdateUi) {
       setIsLooking(focused);
-      setMessage(focused ? messageForStage(growth.state) : "它在等你回来");
+      setMessage(focused ? messageForStage(growth.state) : "The flower is waiting for you.");
       lastUiUpdateRef.current = now;
     }
 
@@ -175,11 +175,11 @@ export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneM
     stopCamera();
     setAppState("loading");
     reset("idle");
-    setMessage("正在唤醒摄像头");
+    setMessage("Waking up the camera...");
 
     try {
       if (!navigator.mediaDevices?.getUserMedia) {
-        throw new Error("当前浏览器不支持摄像头访问。");
+        throw new Error("This browser does not support camera access.");
       }
 
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -194,13 +194,13 @@ export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneM
       streamRef.current = stream;
 
       if (!videoRef.current) {
-        throw new Error("视频元素还没有准备好。");
+        throw new Error("The video element is not ready yet.");
       }
 
       videoRef.current.srcObject = stream;
       await videoRef.current.play();
 
-      setMessage("正在加载眼睛检测");
+      setMessage("Loading eye tracking...");
       const vision = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm"
       );
@@ -221,7 +221,7 @@ export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneM
       reset("idle");
       setAppState("ready");
       setIsLooking(false);
-      setMessage("看着它，它会长大 🌱");
+      setMessage("Look at the flower and it will grow.");
       frameRef.current = requestAnimationFrame(tick);
     } catch (error) {
       stopCamera();
@@ -231,7 +231,7 @@ export function useGaze(videoRef: RefObject<HTMLVideoElement>, sceneMode: SceneM
       setMessage(
         error instanceof Error
           ? error.message
-          : "摄像头不可用或权限被拒绝，请允许浏览器访问摄像头后再试。"
+          : "Camera access was denied or unavailable. Allow camera access and try again."
       );
     }
   };

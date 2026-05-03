@@ -64,7 +64,7 @@ export function Plant({ type, state, alive, sceneMode }: PlantProps) {
       className={`plant-root plant-${state} plant-scene-${sceneMode} leaf-${type.shape.leafType} flower-${type.shape.flowerType} ${
         alive ? "plant-alive" : state === "wilt" ? "plant-away" : ""
       }`}
-      aria-label={`植物状态：${state}，植物：${type.name}`}
+      aria-label={`Plant state: ${state}; plant: ${type.name}`}
       style={
         {
           "--plant-stem": type.colors.stem,

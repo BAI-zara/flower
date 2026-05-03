@@ -25,3 +25,6 @@ next-dev.err.log
 
 # typescript
 *.tsbuildinfo
+
+.vercel
+.env*.local

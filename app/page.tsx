@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PlantSelector } from "../components/PlantSelector";
 import { Scene } from "../components/scene/Scene";
@@ -17,10 +18,7 @@ export default function Home() {
   const [debugOpen, setDebugOpen] = useState(false);
   const [selectedPlantId, setSelectedPlantId] = useState(defaultPlant.id);
   const [sceneMode, setSceneMode] = useState<SceneMode>("day");
-  const { appState, growthState, focusedSeconds, isLooking, message, start } = useGaze(
-    videoRef,
-    sceneMode
-  );
+  const { appState, growthState, focusedSeconds, isLooking, start } = useGaze(videoRef, sceneMode);
 
   useEffect(() => {
     const savedPlantId = window.localStorage.getItem(STORAGE_KEY);
@@ -45,13 +43,38 @@ export default function Home() {
   }, [sceneMode]);
 
   const selectedPlant = useMemo(() => getPlantById(selectedPlantId), [selectedPlantId]);
-  const displayMessage =
-    appState === "ready" && growthState === "flower" ? selectedPlant.bloomText : message;
   const sparkleCount =
     growthState === "giant" ? 22 : growthState === "mature" ? 16 : growthState === "flower" ? 10 : 6;
+  const displayMessage =
+    appState === "idle"
+      ? "Look at the flower to help it grow."
+      : appState === "loading"
+        ? "Waking up the garden..."
+        : appState === "error"
+          ? "Camera access was not available. Try again when you are ready."
+          : growthState === "giant"
+            ? "A glowing flower is wide awake."
+            : growthState === "flower" || growthState === "mature"
+              ? selectedPlant.bloomText
+              : "Keep your gaze softly on the bloom.";
 
   return (
     <Scene stage={growthState} looking={isLooking} sceneMode={sceneMode} setSceneMode={setSceneMode}>
+      <section className="scene-layer home-hero" aria-label="Flower Last Bloom entry">
+        <div>
+          <p className="eyebrow">Flower</p>
+          <h1>Grow a quiet bloom</h1>
+          <p>Win daily flower prizes in Last Bloom.</p>
+          <div className="home-hero-actions">
+            <Link href="/game">Play Last Bloom</Link>
+            <Link href="/rules">Rules</Link>
+          </div>
+          <p className="home-legal">
+            No purchase necessary. Purchase does not increase your chances of winning.
+          </p>
+        </div>
+      </section>
+
       <section className="scene-layer plant-core garden" aria-live="polite">
         <div className="focus-stage">
           <ProgressRing seconds={focusedSeconds} active={isLooking} complete={growthState === "giant"} />
@@ -73,7 +96,7 @@ export default function Home() {
 
         {appState === "idle" || appState === "error" ? (
           <button className="start-button" type="button" onClick={start}>
-            {appState === "idle" ? "点击开始" : "再试一次"}
+            {appState === "idle" ? "Start" : "Try again"}
           </button>
         ) : null}
 
@@ -89,7 +112,7 @@ export default function Home() {
         aria-expanded={debugOpen}
         aria-controls="camera-preview"
       >
-        调试
+        Debug
       </button>
       <video
         ref={videoRef}

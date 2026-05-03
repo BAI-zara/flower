@@ -19,9 +19,9 @@ export type PlantType = {
 export const plants: PlantType[] = [
   {
     id: "sprout",
-    name: "小绿芽",
-    icon: "🌱",
-    bloomText: "它为你开了 🌱",
+    name: "Green Bloom",
+    icon: "Seed",
+    bloomText: "A soft green flower opens for you.",
     colors: {
       stem: "#5faa65",
       leaf: "#70b878",
@@ -36,9 +36,9 @@ export const plants: PlantType[] = [
   },
   {
     id: "sakura",
-    name: "樱花",
-    icon: "🌸",
-    bloomText: "它为你开了一树樱花 🌸",
+    name: "Sakura",
+    icon: "Petal",
+    bloomText: "A small sakura tree opens in the breeze.",
     colors: {
       stem: "#6fac72",
       leaf: "#75bd82",
@@ -53,9 +53,9 @@ export const plants: PlantType[] = [
   },
   {
     id: "sunflower",
-    name: "向日葵",
-    icon: "🌻",
-    bloomText: "它朝着你盛开 🌻",
+    name: "Sunflower",
+    icon: "Sun",
+    bloomText: "A sunflower turns toward the light.",
     colors: {
       stem: "#5f9f56",
       leaf: "#6fb56f",
@@ -70,9 +70,9 @@ export const plants: PlantType[] = [
   },
   {
     id: "bluebell",
-    name: "小蓝花",
-    icon: "💙",
-    bloomText: "它把一点蓝色送给你 💙",
+    name: "Bluebell",
+    icon: "Blue",
+    bloomText: "A bluebell sends a little sky back to you.",
     colors: {
       stem: "#5aa37d",
       leaf: "#69b58e",

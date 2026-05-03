@@ -11,7 +11,7 @@ type PlantSelectorProps = {
 
 export function PlantSelector({ plants, selectedId, onSelect }: PlantSelectorProps) {
   return (
-    <nav className="plant-selector" aria-label="选择植物">
+    <nav className="plant-selector" aria-label="Choose a plant">
       {plants.map((plant) => (
         <button
           className={`plant-card ${plant.id === selectedId ? "is-selected" : ""}`}
